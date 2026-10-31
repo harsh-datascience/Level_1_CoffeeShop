@@ -1,0 +1,148 @@
+table CoffeeShop_Sales
+	lineageTag: 0f4c2a8e-6b1d-4e57-b3a9-7c2d5e8f1a04
+
+	measure 'Total Sales' = SUM(CoffeeShop_Sales[SalesAmount])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 1a7e3c90-5d2b-4f8a-9e64-2b8c0d6f3a11
+
+	measure 'Total Quantity' = SUM(CoffeeShop_Sales[Quantity])
+		formatString: #,0
+		lineageTag: 2b8f4da1-6e3c-4a9b-8f75-3c9d1e7a4b22
+
+	measure 'Total Orders' = DISTINCTCOUNT(CoffeeShop_Sales[OrderID])
+		formatString: #,0
+		lineageTag: 3c9a5eb2-7f4d-4bac-9a86-4dae2f8b5c33
+
+	measure 'Average Order Value' = DIVIDE([Total Sales], [Total Orders])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 4dab6fc3-8a5e-4cbd-ab97-5ebf3a9c6d44
+
+	column OrderID
+		dataType: string
+		lineageTag: 5ebc7ad4-9b6f-4dce-bca8-6fca4bad7e55
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: dd-mmm-yyyy
+		lineageTag: 6fcd8be5-ac7a-4edf-8db9-7adb5cbe8f66
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column OrderTime
+		dataType: dateTime
+		formatString: hh:nn
+		lineageTag: 7ade9cf6-bd8b-4fe0-9eca-8bec6dcf9a77
+		summarizeBy: none
+		sourceColumn: OrderTime
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Product
+		dataType: string
+		lineageTag: 8bef0da7-ce9c-4af1-afdb-9cfd7ed0ab88
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 9cf01eb8-dfad-4b02-b0ec-ad0e8fe1bc99
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: #,0
+		lineageTag: ad012fc9-e0be-4c13-81fd-be1f9af2cdaa
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: be1230da-f1cf-4d24-92ae-cfa0ad03debb
+		summarizeBy: none
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = User
+
+	column SalesAmount
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: cf2341eb-02d0-4e35-a310-d0b1be14efcc
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentMethod
+		dataType: string
+		lineageTag: d03452fc-13e1-4f46-b421-e1c2cf25f0dd
+		summarizeBy: none
+		sourceColumn: PaymentMethod
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeek
+		dataType: string
+		lineageTag: e1456303-24f2-4057-c532-f2d3d036a1ee
+		summarizeBy: none
+		sourceColumn: DayOfWeek
+		sortByColumn: DayOfWeekNo
+
+		annotation SummarizationSetBy = Automatic
+
+	/// 1 = Monday … 7 = Sunday; sort key for DayOfWeek.
+	column DayOfWeekNo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f2567414-3503-4168-d643-03e4e147b2ff
+		summarizeBy: none
+		sourceColumn: DayOfWeekNo
+
+		annotation SummarizationSetBy = Automatic
+
+	/// First day of the order's month; axis for the monthly sales trend.
+	column OrderMonth
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 03678525-4614-4279-e754-14f5f258c310
+		summarizeBy: none
+		sourceColumn: OrderMonth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition CoffeeShop_Sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "CoffeeShop_Sales.csv"), [Delimiter = ",", Columns = 10, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"OrderID", type text}, {"OrderDate", type date}, {"OrderTime", type time}, {"Product", type text}, {"Category", type text}, {"Quantity", Int64.Type}, {"UnitPrice", type number}, {"SalesAmount", type number}, {"PaymentMethod", type text}, {"DayOfWeek", type text}}, "en-US"),
+				    #"Added DayOfWeekNo" = Table.AddColumn(#"Changed Type", "DayOfWeekNo", each Date.DayOfWeek([OrderDate], Day.Monday) + 1, Int64.Type),
+				    #"Added OrderMonth" = Table.AddColumn(#"Added DayOfWeekNo", "OrderMonth", each Date.StartOfMonth([OrderDate]), type date)
+				in
+				    #"Added OrderMonth"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,162 @@
+{
+  "name": "Bean & Brew",
+  "dataColors": [
+    "#6F4E37",
+    "#C8A27A",
+    "#7C8B4F",
+    "#D9822B",
+    "#3B2314",
+    "#A0522D",
+    "#E8C9A0",
+    "#5C7457",
+    "#B5651D",
+    "#8B6F5A"
+  ],
+  "foreground": "#2B1A10",
+  "foregroundNeutralSecondary": "#6B5B4F",
+  "foregroundNeutralTertiary": "#A89888",
+  "background": "#FFFFFF",
+  "backgroundLight": "#F7F1EA",
+  "backgroundNeutral": "#E6D9CC",
+  "backgroundDark": "#3B2314",
+  "tableAccent": "#6F4E37",
+  "good": "#5C7457",
+  "neutral": "#D9822B",
+  "bad": "#B23A2E",
+  "maximum": "#6F4E37",
+  "center": "#C8A27A",
+  "minimum": "#F7F1EA",
+  "null": "#A89888",
+  "textClasses": {
+    "callout": {
+      "fontSize": 32,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#6F4E37"
+    },
+    "title": {
+      "fontSize": 13,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#3B2314"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#3B2314"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#6B5B4F"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E6D9CC"
+              }
+            },
+            "radius": 10,
+            "width": 1
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "padding": [
+          {
+            "top": 10,
+            "bottom": 10,
+            "left": 12,
+            "right": 12
+          }
+        ],
+        "subTitle": [
+          {
+            "show": false
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#3B2314"
+              }
+            },
+            "fontSize": 13,
+            "fontFamily": "Segoe UI Semibold"
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F7F1EA"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F7F1EA"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [
+          {
+            "backColor": {
+              "solid": {
+                "color": "#3B2314"
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ],
+        "values": [
+          {
+            "backColorSecondary": {
+              "solid": {
+                "color": "#F7F1EA"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
